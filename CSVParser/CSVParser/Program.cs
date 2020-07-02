@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace CSVParser
 {
@@ -6,7 +7,9 @@ namespace CSVParser
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            StreamReader sr = new StreamReader(@filename);
+            string data = sr.ReadLine();
+
         }
     }
 }
