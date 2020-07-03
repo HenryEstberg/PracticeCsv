@@ -7,15 +7,10 @@ namespace CSVParser
     {
         static void Main(string[] args)
         {
-            StreamReader sr = new StreamReader("../../../../ProjectExample.csv");
-            string data = sr.ReadLine();
-            while (data != null)
-            {
-                string[] commaSeperated = data.Split(',');
-                Console.WriteLine(data);
-                data = sr.ReadLine();
-            }
-
+            Reader r = new Reader("../../../../ProjectExample.csv");
+            r.FileRead();
         }
+
+
     }
 }
