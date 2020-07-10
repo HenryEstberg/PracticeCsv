@@ -17,7 +17,7 @@ namespace CSVParser
         {
             this.filepath = filepth;
         }
-        //This method runs through the csv file and spits out the contents of each cell individually into the console
+        //This method runs through the csv file and separates the contents into cell strings row by row
         public void FileRead()
         {
             using (TextFieldParser fileReader = new TextFieldParser(filepath))
@@ -27,6 +27,8 @@ namespace CSVParser
                 while (!fileReader.EndOfData)
                 {
                     string[] lineData = fileReader.ReadFields();
+
+                    //spits out the contents of each cell individually into the console
                     foreach (var cell in lineData)
                     {
                         Console.WriteLine(cell);
