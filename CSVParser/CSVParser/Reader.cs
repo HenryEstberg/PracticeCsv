@@ -43,19 +43,26 @@ namespace CSVParser
                     rowObject = new Row(animal, temp, taboo, comment);
                     rowList.Add(rowObject);
 
-                    //spits out the contents of each cell individually into the console
-                    foreach (var cell in lineData)
+                    //spits out the contents of each cell individually into the console, pretty much ignores rows
+                    /*foreach (var cell in lineData)
                     {
                         Console.WriteLine(cell);
                     }
+                    */
                 }
+            }
+
+            foreach (Row arr in rowList)
+            {
+                Console.WriteLine(arr.PrintRow());
             }
 
         }
 
 
-
+        //--------------
         //helper methods
+        //--------------
         private string Animal(string animal)
         {
             //I know it will always be a string, so there's no need for a conversion here

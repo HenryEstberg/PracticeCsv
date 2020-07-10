@@ -18,5 +18,11 @@ namespace CSVParser
             this.taboo = yn;
             this.comment = concerns;
         }
+
+        public string PrintRow()
+        {
+            return ("Animal: " + this.animal + ", Cooking Temperature: " + this.cookingTemp + ", Taboo: " + this.taboo +
+                    ", Comment: " + this.comment);
+        }
     }
 }
