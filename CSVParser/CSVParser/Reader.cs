@@ -17,6 +17,7 @@ namespace CSVParser
         {
             this.filepath = filepth;
         }
+        //This method runs through the csv file and spits out the contents of each cell individually into the console
         public void FileRead()
         {
             using (TextFieldParser fileReader = new TextFieldParser(filepath))
