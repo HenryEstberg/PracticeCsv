@@ -92,6 +92,16 @@ namespace CSVParser
             {
                 return result;
             }
+            //these if statements look for other ways the user could try to say "true" or "false"
+            if (taboo == "yes" || taboo == "y")
+            {
+                return true;
+            }
+
+            if (taboo == "no" || taboo == "n")
+            {
+                return false;
+            }
             else
             {
                 return false;

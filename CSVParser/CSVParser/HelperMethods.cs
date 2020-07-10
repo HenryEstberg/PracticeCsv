@@ -8,7 +8,7 @@ namespace CSVParser
     class HelperMethods
     {
    
-
+        //this class never get used because we copied all of the methods into the reader class 
         static string Animal(string animal)
         {
           //I know it will always be a string, so there's no need for a conversion here
