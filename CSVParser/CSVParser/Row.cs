@@ -21,8 +21,8 @@ namespace CSVParser
 
         public string PrintRow()
         {
-            return ("Animal: " + this.animal + ", Cooking Temperature: " + this.cookingTemp + ", Taboo: " + this.taboo +
-                    ", Comment: " + this.comment);
+            return ("(0): " + this.animal + ", (1): " + this.cookingTemp + ", (2): " + this.taboo +
+                    ", (3): " + this.comment);
         }
     }
 }
