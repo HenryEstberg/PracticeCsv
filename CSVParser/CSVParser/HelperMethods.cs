@@ -7,46 +7,33 @@ namespace CSVParser
 {
     class HelperMethods
     {
-   
-        //this class never get used because we copied all of the methods into the reader class 
-        static string Animal(string animal)
-        {
-          //I know it will always be a string, so there's no need for a conversion here
-          return animal;
-        }
+        
 
-        static double Cooking_temp(string temp)
+        static bool CookingTempError(string temp)
         {
-           // parseable is true if the computer can convert the string to a double
-            
-           bool parseable = Double.TryParse(temp, out double result);
-
+            //If there's no problem, this method returns false. "true" means there is an error
+            bool parseable = Double.TryParse(temp, out double result);
             if (parseable == true)
-            {
-                return result;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        static bool Taboo(string taboo)
-        {
-            bool parseable = Boolean.TryParse(taboo, out bool result);
-            if (parseable == true)
-            {
-                return result;
-            }
-            else
             {
                 return false;
             }
+            else
+            {
+                return true;
+            }
         }
-
-        static string Comment(string comment)
+        static bool TabooError(string taboo)
         {
-            return comment;
+            //If there's no problem, this method returns false. "true" means there is an error
+            bool parseable = Boolean.TryParse(taboo, out bool result);
+            if (parseable == true)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
