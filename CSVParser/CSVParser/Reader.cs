@@ -62,7 +62,7 @@ namespace CSVParser
                 {
                     string[] lineData = fileReader.ReadFields();
 
-                    //sets the paramaters of the row object and adds it to the list of rows
+                    //sets the parameters of the row object and adds it to the list of rows
                     animal = Animal(lineData[0]);
                     temp = Cooking_temp(lineData[1]);
                     taboo = Taboo(lineData[2]);
@@ -101,7 +101,12 @@ namespace CSVParser
 
         private double Cooking_temp(string temp)
         {
-            //parseable is true if the computer can convert the string to a double
+           //first we check for commas, and return an error if the cell contains any 
+           if (temp.Contains(","))
+           {
+               bool tempCommaError = true;
+           }
+           //parseable is true if the computer can convert the string to a double
 
             bool parseable = Double.TryParse(temp, out double result);
 
@@ -111,6 +116,8 @@ namespace CSVParser
             }
             else
             {
+                bool tempParseError = true;
+                //We still return a value so the code runs, but that value will not appear in the final table
                 return 0;
             }
         }
@@ -134,6 +141,7 @@ namespace CSVParser
             }
             else
             {
+                bool tempParseError = true;
                 return false;
             }
         }
