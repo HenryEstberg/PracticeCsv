@@ -21,7 +21,6 @@ namespace CSVParser
         private string comment;        //stores the comment for the current line of the file being parsed
         private int colNum;            //stores which column the current cell being printed belongs to, for readability
         private int rowNum;            //stores the number of the current row, for readability
-        private bool tempCommaError;
         private bool tempParseError;
         private bool tabooParseError;
 
@@ -70,17 +69,17 @@ namespace CSVParser
                     temp = Cooking_temp(lineData[1]);
                     taboo = Taboo(lineData[2]);
                     comment = Comment(lineData[3]);
-                    if (tempParseError)
+                    if (tabooParseError && tempParseError)
                     {
-                        rowObject = new Row(animal, temp, taboo, comment, "ERROR: temp entered incorrectly");
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo and temp entered incorrectly|");
+                    }
+                    else if (tempParseError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: temp entered incorrectly|");
                     }
                     else if (tabooParseError)
                     {
-                        rowObject = new Row(animal, temp, taboo, comment, "ERROR: taboo entered incorrectly");
-                    }
-                    else if (tabooParseError && tempParseError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, "ERROR: taboo and temp entered incorrectly");
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo entered incorrectly|");
                     }
                     else
                     {
@@ -122,19 +121,18 @@ namespace CSVParser
 
         private double Cooking_temp(string temp)
         {
-           //first we check for commas, and return an error if the cell contains any 
-           if (temp.Contains(","))
-           {
-               tempCommaError = true;
-           }
            //parseable is true if the computer can convert the string to a double
 
             bool parseable = Double.TryParse(temp, out double result);
 
             if (parseable)
             {
-                return result;
                 tempParseError = false;
+                if (temp.Contains(","))
+                {
+                    tempParseError = true;
+                }
+                return result;
             }
             else
             {
@@ -154,11 +152,12 @@ namespace CSVParser
             //these if statements look for other ways the user could try to say "true" or "false"
             if (taboo == "yes" || taboo == "y")
             {
+                tabooParseError = false;
                 return true;
             }
-
-            if (taboo == "no" || taboo == "n")
+            else if (taboo == "no" || taboo == "n")
             {
+                tabooParseError = false;
                 return false;
             }
             else
