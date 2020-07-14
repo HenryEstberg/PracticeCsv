@@ -21,6 +21,9 @@ namespace CSVParser
         private string comment;        //stores the comment for the current line of the file being parsed
         private int colNum;            //stores which column the current cell being printed belongs to, for readability
         private int rowNum;            //stores the number of the current row, for readability
+        private bool tempCommaError;
+        private bool tempParseError;
+        private bool tabooParseError;
 
         Row rowObject;                 //currently the rowObject itself is setup to only allow a set number of specific entries per row in the csv file
         List<Row> rowList = new List<Row>();
@@ -67,7 +70,23 @@ namespace CSVParser
                     temp = Cooking_temp(lineData[1]);
                     taboo = Taboo(lineData[2]);
                     comment = Comment(lineData[3]);
-                    rowObject = new Row(animal, temp, taboo, comment);
+                    if (tempParseError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, "ERROR: temp entered incorrectly");
+                    }
+                    else if (tabooParseError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, "ERROR: taboo entered incorrectly");
+                    }
+                    else if (tabooParseError && tempParseError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, "ERROR: taboo and temp entered incorrectly");
+                    }
+                    else
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment);
+                    }
+                    
                     rowList.Add(rowObject);
 
                     //spits out the contents of each cell individually into the console, pretty much ignores rows
@@ -79,11 +98,13 @@ namespace CSVParser
                 }
             }
 
+            
             rowNum = 0;
             foreach (Row arr in rowList)
             {
                 Console.Write("R" + rowNum + ": ");
                 Console.WriteLine(arr.PrintRow());
+              
                 rowNum++;
             }
 
@@ -104,19 +125,20 @@ namespace CSVParser
            //first we check for commas, and return an error if the cell contains any 
            if (temp.Contains(","))
            {
-               bool tempCommaError = true;
+               tempCommaError = true;
            }
            //parseable is true if the computer can convert the string to a double
 
             bool parseable = Double.TryParse(temp, out double result);
 
-            if (parseable == true)
+            if (parseable)
             {
                 return result;
+                tempParseError = false;
             }
             else
             {
-                bool tempParseError = true;
+               tempParseError = true;
                 //We still return a value so the code runs, but that value will not appear in the final table
                 return 0;
             }
@@ -125,7 +147,7 @@ namespace CSVParser
         private bool Taboo(string taboo)
         {
             bool parseable = Boolean.TryParse(taboo, out bool result);
-            if (parseable == true)
+            if (parseable)
             {
                 return result;
             }
@@ -141,7 +163,7 @@ namespace CSVParser
             }
             else
             {
-                bool tempParseError = true;
+                tabooParseError = true;
                 return false;
             }
         }
