@@ -21,6 +21,8 @@ namespace CSVParser
             this.taboo = yn;
             this.comment = concerns;
         }
+        
+        //this overloaded method only gets activated when we pass in an error message on top of the other variables
         public Row(string meat, double cookTemp, bool yn, string concerns, string errorMessage)
         {
             this.animal = meat;

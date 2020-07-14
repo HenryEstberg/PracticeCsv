@@ -21,8 +21,9 @@ namespace CSVParser
         private string comment;        //stores the comment for the current line of the file being parsed
         private int colNum;            //stores which column the current cell being printed belongs to, for readability
         private int rowNum;            //stores the number of the current row, for readability
-        private bool tempParseError;
-        private bool tabooParseError;
+        private bool tempParseError;   // stores if the cooking temp is parseable into a double
+        private bool tempCommaError;   // stores if the cooking temp contains any commas
+        private bool tabooParseError;  // stores if the taboo is parseable into a bool
 
         Row rowObject;                 //currently the rowObject itself is setup to only allow a set number of specific entries per row in the csv file
         List<Row> rowList = new List<Row>();
@@ -69,17 +70,30 @@ namespace CSVParser
                     temp = Cooking_temp(lineData[1]);
                     taboo = Taboo(lineData[2]);
                     comment = Comment(lineData[3]);
+                    //checks booleans indicating errors and adds appropriate error messages to the rows
                     if (tabooParseError && tempParseError)
                     {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo and temp entered incorrectly|");
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo is not entered in yes / no format and cooking temp is not entered as a numeral|");
+                    }
+                    else if (tabooParseError && tempCommaError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas and taboo is not entered in yes / no format|");
+                    }
+                    else if (tempCommaError && tempParseError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas and is not entered as a numeral|");
+                    }
+                    else if (tempCommaError)
+                    {
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas|");
                     }
                     else if (tempParseError)
                     {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: temp entered incorrectly|");
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp is not entered as a numeral|");
                     }
                     else if (tabooParseError)
                     {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo entered incorrectly|");
+                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo is not entered in yes / no format|");
                     }
                     else
                     {
@@ -130,14 +144,15 @@ namespace CSVParser
                 tempParseError = false;
                 if (temp.Contains(","))
                 {
-                    tempParseError = true;
+                    tempCommaError = true;
+                    return 0;
                 }
                 return result;
             }
             else
             {
                tempParseError = true;
-                //We still return a value so the code runs, but that value will not appear in the final table
+                //We will return a default value so that the code runs
                 return 0;
             }
         }
