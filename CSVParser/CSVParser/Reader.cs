@@ -24,6 +24,8 @@ namespace CSVParser
         private bool tempParseError;   // stores if the cooking temp is parseable into a double
         private bool tempCommaError;   // stores if the cooking temp contains any commas
         private bool tabooParseError;  // stores if the taboo is parseable into a bool
+        private string incorrectTemp;
+        private string incorrectTaboo;
 
         Row rowObject;                 //currently the rowObject itself is setup to only allow a set number of specific entries per row in the csv file
         List<Row> rowList = new List<Row>();
@@ -77,32 +79,32 @@ namespace CSVParser
                         //checks booleans indicating errors and adds appropriate error messages to the rows
                         if (tabooParseError && tempParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment,
-                                " |ERROR: taboo is not entered in yes / no format and cooking temp is not entered as a numeral|");
+                            rowObject = new Row(animal, temp, taboo, comment, "taboo and temp" ,
+                                " |ERROR: taboo \"" + incorrectTaboo + "\" is not entered in yes / no format and cooking temp \"" + incorrectTemp + "\" is not entered as a numeral|");
                         }
                         else if (tabooParseError && tempCommaError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment,
-                                " |ERROR: cooking temp contains commas and taboo is not entered in yes / no format|");
+                            rowObject = new Row(animal, temp, taboo, comment, "taboo and temp" ,
+                                " |ERROR: cooking temp \"" + incorrectTemp + "\" contains commas and taboo \"" + incorrectTaboo + "\" is not entered in yes / no format|");
                         }
                         else if (tempCommaError && tempParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment,
-                                " |ERROR: cooking temp contains commas and is not entered as a numeral|");
+                            rowObject = new Row(animal, temp, taboo, comment, "temp",
+                                " |ERROR: cooking temp \""+ incorrectTemp + "\" contains commas and is not entered as a numeral|");
                         }
                         else if (tempCommaError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas|");
+                            rowObject = new Row(animal, temp, taboo, comment, "temp", " |ERROR: cooking temp \"" + incorrectTemp +"\" contains commas|");
                         }
                         else if (tempParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment,
-                                " |ERROR: cooking temp is not entered as a numeral|");
+                            rowObject = new Row(animal, temp, taboo, comment, "temp" ,
+                                " |ERROR: cooking temp \""+ incorrectTemp + "\" is not entered as a numeral|");
                         }
                         else if (tabooParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment,
-                                " |ERROR: taboo is not entered in yes / no format|");
+                            rowObject = new Row(animal, temp, taboo, comment, "taboo",
+                                " |ERROR: taboo \""+ incorrectTaboo + "\" is not entered in yes / no format|");
                         }
                         else
                         {
@@ -161,6 +163,7 @@ namespace CSVParser
                 if (temp.Contains(","))
                 {
                     tempCommaError = true;
+                    incorrectTemp = temp;
                     return 0;
                 }
                 return result;
@@ -168,6 +171,7 @@ namespace CSVParser
             else
             {
                tempParseError = true;
+               incorrectTemp = temp;
                 //We will return a default value so that the code runs
                 return 0;
             }
@@ -194,6 +198,7 @@ namespace CSVParser
             else
             {
                 tabooParseError = true;
+                incorrectTaboo = taboo;
                 return false;
             }
         }
