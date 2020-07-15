@@ -53,9 +53,10 @@ namespace CSVParser
                         //reads a new line of the csv file
                         string[] lineData = fileReader.ReadFields();
                         colNum = 0;
+                        Console.Write("HD: ");
                         foreach (string str in lineData)
                         {
-                            Console.Write("(" + colNum + ") " + str + " || ");
+                            Console.Write(str + ",");
                             colNum++;
                         }
 
@@ -139,6 +140,12 @@ namespace CSVParser
         private string Animal(string animal)
         {
             //I know it will always be a string, so there's no need for a conversion here
+            
+            //adds quotation marks if the string contains commas
+            if (animal.Contains(","))
+            {
+                return "\"" + animal + "\"";
+            }
             return animal;
         }
 
@@ -193,6 +200,10 @@ namespace CSVParser
 
         private string Comment(string comment)
         {
+            if (comment.Contains(","))
+            {
+                return "\"" + comment + "\"";
+            }
             return comment;
         }
 

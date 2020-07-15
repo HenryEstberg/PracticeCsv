@@ -33,8 +33,8 @@ namespace CSVParser
         }
         public string PrintRow()
         {
-            return ("(0): " + this.animal + ", (1): " + this.cookingTemp + ", (2): " + this.taboo +
-                    ", (3): " + this.comment + this.error);
+            return (this.animal + ",  " + this.cookingTemp + ",  " + this.taboo +
+                    ",  " + this.comment + this.error);
 
         }
     }
