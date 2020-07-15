@@ -12,6 +12,8 @@ namespace CSVParser
         public bool taboo;
         public string comment;
         public string error;
+        public string errorSpot;
+        public string notAvailable = "N/A";
 
 
         public Row(string meat, double cookTemp, bool yn, string concerns)
@@ -23,18 +25,34 @@ namespace CSVParser
         }
         
         //this overloaded method only gets activated when we pass in an error message on top of the other variables
-        public Row(string meat, double cookTemp, bool yn, string concerns, string errorMessage)
+        public Row(string meat, double cookTemp, bool yn, string concerns, string errorLocation, string errorMessage)
         {
             this.animal = meat;
             this.cookingTemp = cookTemp;
             this.taboo = yn;
             this.comment = concerns;
             this.error = errorMessage;
+            this.errorSpot = errorLocation;
         }
         public string PrintRow()
         {
-            return ("(0): " + this.animal + ", (1): " + this.cookingTemp + ", (2): " + this.taboo +
-                    ", (3): " + this.comment + this.error);
+            if (errorSpot == "temp")
+            {
+                return (this.animal + ",  " + notAvailable + ",  " + this.taboo +
+                        ",  " + this.comment + this.error);
+            }
+            else if (errorSpot == "taboo")
+            {
+                return (this.animal + ",  " + this.cookingTemp + ",  " + notAvailable +
+                        ",  " + this.comment + this.error);
+            }
+            else if (errorSpot == "taboo and temp")
+            {
+                return (this.animal + ",  " + notAvailable + ",  " + notAvailable +
+                        ",  " + this.comment + this.error);
+            }
+            return (this.animal + ",  " + this.cookingTemp + ",  " + this.taboo +
+                    ",  " + this.comment + this.error);
 
         }
     }
