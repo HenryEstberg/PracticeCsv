@@ -40,85 +40,94 @@ namespace CSVParser
         //This method runs through the csv file and displays its contents
         public void FileRead()
         {
-            using (TextFieldParser fileReader = new TextFieldParser(filepath))
+            if (File.Exists(this.filepath))
             {
-                fileReader.SetDelimiters(new string[] {","});
-                fileReader.HasFieldsEnclosedInQuotes = true;
-
-                //prints the appropriate header if the file contains one
-                if (hasHeader.Equals("Y"))
+                using (TextFieldParser fileReader = new TextFieldParser(filepath))
                 {
-                    //reads a new line of the csv file
-                    string[] lineData = fileReader.ReadFields();
-                    colNum = 0;
-                    foreach (string str in lineData)
-                    {
-                        Console.Write("(" + colNum + ") " + str + " || ");
-                        colNum++;
-                    }
-                    Console.WriteLine();
+                    fileReader.SetDelimiters(new string[] {","});
+                    fileReader.HasFieldsEnclosedInQuotes = true;
 
+                    //prints the appropriate header if the file contains one
+                    if (hasHeader.Equals("Y"))
+                    {
+                        //reads a new line of the csv file
+                        string[] lineData = fileReader.ReadFields();
+                        colNum = 0;
+                        foreach (string str in lineData)
+                        {
+                            Console.Write("(" + colNum + ") " + str + " || ");
+                            colNum++;
+                        }
+
+                        Console.WriteLine();
+
+                    }
+
+                    //prints the rest of the file and creates a collection of all of the data
+                    while (!fileReader.EndOfData)
+                    {
+                        string[] lineData = fileReader.ReadFields();
+
+                        //sets the parameters of the row object and adds it to the list of rows
+                        animal = Animal(lineData[0]);
+                        temp = Cooking_temp(lineData[1]);
+                        taboo = Taboo(lineData[2]);
+                        comment = Comment(lineData[3]);
+                        //checks booleans indicating errors and adds appropriate error messages to the rows
+                        if (tabooParseError && tempParseError)
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment,
+                                " |ERROR: taboo is not entered in yes / no format and cooking temp is not entered as a numeral|");
+                        }
+                        else if (tabooParseError && tempCommaError)
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment,
+                                " |ERROR: cooking temp contains commas and taboo is not entered in yes / no format|");
+                        }
+                        else if (tempCommaError && tempParseError)
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment,
+                                " |ERROR: cooking temp contains commas and is not entered as a numeral|");
+                        }
+                        else if (tempCommaError)
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas|");
+                        }
+                        else if (tempParseError)
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment,
+                                " |ERROR: cooking temp is not entered as a numeral|");
+                        }
+                        else if (tabooParseError)
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment,
+                                " |ERROR: taboo is not entered in yes / no format|");
+                        }
+                        else
+                        {
+                            rowObject = new Row(animal, temp, taboo, comment);
+                        }
+
+                        rowList.Add(rowObject);
+
+                        //spits out the contents of each cell individually into the console, pretty much ignores rows
+                        /*foreach (var cell in lineData)
+                        {
+                            Console.WriteLine(cell);
+                        }
+                        */
+                    }
                 }
 
-                //prints the rest of the file and creates a collection of all of the data
-                while (!fileReader.EndOfData)
+
+                rowNum = 0;
+                foreach (Row arr in rowList)
                 {
-                    string[] lineData = fileReader.ReadFields();
+                    Console.Write("R" + rowNum + ": ");
+                    Console.WriteLine(arr.PrintRow());
 
-                    //sets the parameters of the row object and adds it to the list of rows
-                    animal = Animal(lineData[0]);
-                    temp = Cooking_temp(lineData[1]);
-                    taboo = Taboo(lineData[2]);
-                    comment = Comment(lineData[3]);
-                    //checks booleans indicating errors and adds appropriate error messages to the rows
-                    if (tabooParseError && tempParseError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo is not entered in yes / no format and cooking temp is not entered as a numeral|");
-                    }
-                    else if (tabooParseError && tempCommaError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas and taboo is not entered in yes / no format|");
-                    }
-                    else if (tempCommaError && tempParseError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas and is not entered as a numeral|");
-                    }
-                    else if (tempCommaError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp contains commas|");
-                    }
-                    else if (tempParseError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: cooking temp is not entered as a numeral|");
-                    }
-                    else if (tabooParseError)
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment, " |ERROR: taboo is not entered in yes / no format|");
-                    }
-                    else
-                    {
-                        rowObject = new Row(animal, temp, taboo, comment);
-                    }
-                    
-                    rowList.Add(rowObject);
-
-                    //spits out the contents of each cell individually into the console, pretty much ignores rows
-                    /*foreach (var cell in lineData)
-                    {
-                        Console.WriteLine(cell);
-                    }
-                    */
+                    rowNum++;
                 }
-            }
-
-            
-            rowNum = 0;
-            foreach (Row arr in rowList)
-            {
-                Console.Write("R" + rowNum + ": ");
-                Console.WriteLine(arr.PrintRow());
-              
-                rowNum++;
             }
 
         }
