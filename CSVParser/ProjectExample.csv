@@ -1,7 +1,7 @@
 animal,cooking temp,taboo,comment
-fish,120,no,
+fish,120,false,
 rabbit,275,no,
 clown,360,yes,does this taste funny to you?
-horse,snotwaffle,no,there's an error here
+horse,snotwaffle,tRuE,there's an error here
 bird,"5,4,3",n,"uh oh, rogue commas"
 123,hi mom,b flat,what a mess
