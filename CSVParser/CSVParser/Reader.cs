@@ -26,9 +26,14 @@ namespace CSVParser
         private bool tabooParseError;  // stores if the taboo is parseable into a bool
         private string incorrectTemp;
         private string incorrectTaboo;
+        private int animalPos;
+        private int tabooPos;
+        private int tempPos;
+        private int commentPos;
+        
 
-        Row rowObject;                 //currently the rowObject itself is setup to only allow a set number of specific entries per row in the csv file
-        List<Row> rowList = new List<Row>();
+        EdibleAnimal _edibleAnimalObject;                 //currently the _edibleAnimalObject itself is setup to only allow a set number of specific entries per row in the csv file
+        List<EdibleAnimal> todaysMenu = new List<EdibleAnimal>();
 
         public Reader(string filepth)
         {
@@ -40,31 +45,50 @@ namespace CSVParser
             this.hasHeader = header;
         }
         //This method runs through the csv file and displays its contents
-        public void FileRead()
+        public List<EdibleAnimal> FileRead()
         {
-            if (File.Exists(this.filepath))
-            {
-                using (TextFieldParser fileReader = new TextFieldParser(filepath))
+            using (TextFieldParser fileReader = new TextFieldParser(filepath))
                 {
                     fileReader.SetDelimiters(new string[] {","});
                     fileReader.HasFieldsEnclosedInQuotes = true;
 
                     //prints the appropriate header if the file contains one
-                    if (hasHeader.Equals("Y"))
-                    {
+                    
                         //reads a new line of the csv file
-                        string[] lineData = fileReader.ReadFields();
+                        string[] headData = fileReader.ReadFields();
                         colNum = 0;
-                        Console.Write("HD: ");
-                        foreach (string str in lineData)
+                        animalPos = 5;
+                        tabooPos = 5;
+                        tempPos = 5;
+                        commentPos = 5;
+                        foreach (string str in headData)
                         {
-                            Console.Write(str + ",");
-                            colNum++;
+                            if (str.Equals("animal"))
+                            {
+                                animalPos = colNum;
+                                Console.WriteLine("AnimalPos: "+ animalPos);
+                            }
+                            else if (str.Equals("taboo"))
+                            {
+                                tabooPos = colNum;
+                                Console.WriteLine("TabooPos: " + tabooPos);
+                        }
+                            else if (str.Equals("cooking temp"))
+                            {
+                                tempPos = colNum;
+                                Console.WriteLine("TempPos: " + tempPos);
+                        }
+                            else if (str.Equals("comment"))
+                            {
+                                commentPos = colNum;
+                                Console.WriteLine("CommentPos: " + commentPos);
+                        }
+                        colNum++;
                         }
 
                         Console.WriteLine();
 
-                    }
+                    
 
                     //prints the rest of the file and creates a collection of all of the data
                     while (!fileReader.EndOfData)
@@ -72,46 +96,81 @@ namespace CSVParser
                         string[] lineData = fileReader.ReadFields();
 
                         //sets the parameters of the row object and adds it to the list of rows
-                        animal = Animal(lineData[0]);
-                        temp = Cooking_temp(lineData[1]);
-                        taboo = Taboo(lineData[2]);
-                        comment = Comment(lineData[3]);
+                        if (animalPos != 5)
+                        {
+                            animal = Animal(lineData[animalPos]);
+                        }
+                        else
+                        {
+                            animal = "N/A";
+                        }
+
+                        if (tempPos != 5)
+                        {
+                            temp = Cooking_temp(lineData[tempPos]);
+                        }
+                        else
+                        {
+                            temp = 0;
+                            tempParseError = true;
+                        }
+
+                        if (tabooPos != 5)
+                        {
+                            taboo = Taboo(lineData[tabooPos]);
+                        }
+                        else
+                        {
+                            tabooParseError = true;
+                            taboo = false;
+                        }
+
+                        if (commentPos != 5)
+                        {
+                            comment = Comment(lineData[commentPos]);
+                        }
+                        else
+                        {
+                            comment = "N/A";
+                        }
+                        
+                        
                         //checks booleans indicating errors and adds appropriate error messages to the rows
                         if (tabooParseError && tempParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "taboo and temp" ,
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment, "taboo and temp" ,
                                 "ERROR: taboo <" + incorrectTaboo + "> is not entered in yes / no format and cooking temp <" + incorrectTemp + "> is not entered as a numeral");
                         }
                         else if (tabooParseError && tempCommaError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "taboo and temp" ,
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment, "taboo and temp" ,
                                 "ERROR: cooking temp <" + incorrectTemp + "> contains commas and taboo <" + incorrectTaboo + "> is not entered in yes / no format");
                         }
                         else if (tempCommaError && tempParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "temp",
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment, "temp",
                                 "ERROR: cooking temp <"+ incorrectTemp + "> contains commas and is not entered as a numeral");
                         }
                         else if (tempCommaError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "temp", " ERROR: cooking temp <" + incorrectTemp +"> contains commas");
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment, "temp", " ERROR: cooking temp <" + incorrectTemp +"> contains commas");
                         }
                         else if (tempParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "temp" ,
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment, "temp" ,
                                 "ERROR: cooking temp <"+ incorrectTemp + "> is not entered as a numeral");
                         }
                         else if (tabooParseError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "taboo",
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment, "taboo",
                                 "ERROR: taboo <"+ incorrectTaboo + "> is not entered in yes / no format");
                         }
                         else
                         {
-                            rowObject = new Row(animal, temp, taboo, comment);
+                            _edibleAnimalObject = new EdibleAnimal(animal, temp, taboo, comment);
                         }
 
-                        rowList.Add(rowObject);
+                        todaysMenu.Add(_edibleAnimalObject);
 
                         //spits out the contents of each cell individually into the console, pretty much ignores rows
                         /*foreach (var cell in lineData)
@@ -122,16 +181,18 @@ namespace CSVParser
                     }
                 }
 
+                
 
+                //prints the contents of the file
                 rowNum = 0;
-                foreach (Row arr in rowList)
+                foreach (EdibleAnimal arr in todaysMenu)
                 {
                     Console.Write("R" + rowNum + ": ");
                     Console.WriteLine(arr.WriteCsvLine());
 
                     rowNum++;
                 }
-            }
+            return todaysMenu;
 
         }
 
