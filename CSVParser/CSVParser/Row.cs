@@ -23,7 +23,7 @@ namespace CSVParser
             this.taboo = yn;
             this.comment = concerns;
         }
-        
+
         //this overloaded method only gets activated when we pass in an error message on top of the other variables
         public Row(string meat, double cookTemp, bool yn, string concerns, string errorLocation, string errorMessage)
         {
@@ -34,6 +34,7 @@ namespace CSVParser
             this.error = errorMessage;
             this.errorSpot = errorLocation;
         }
+
         public string PrintRow()
         {
             if (errorSpot == "temp")
@@ -51,9 +52,34 @@ namespace CSVParser
                 return (this.animal + ",  " + notAvailable + ",  " + notAvailable +
                         ",  " + this.comment + this.error);
             }
+
             return (this.animal + ",  " + this.cookingTemp + ",  " + this.taboo +
                     ",  " + this.comment + this.error);
 
+        }
+
+        //this method is very similar to the PrintRow method, but the syntax is different so it fits in a CSV
+        //there are less spaces and more commas
+        public string WriteCsvLine()
+        {
+            if (errorSpot == "temp")
+            {
+                return (this.animal + "," + notAvailable + "," + this.taboo +
+                        "," + this.comment + "," + this.error);
+            }
+            else if (errorSpot == "taboo")
+            {
+                return (this.animal + "," + this.cookingTemp + "," + notAvailable +
+                        "," + this.comment + "," + this.error);
+            }
+            else if (errorSpot == "taboo and temp")
+            {
+                return (this.animal + "," + notAvailable + "," + notAvailable +
+                        "," + this.comment + "," + this.error);
+            }
+
+            return (this.animal + "," + this.cookingTemp + "," + this.taboo +
+                    "," + this.comment + "," + this.error);
         }
     }
 }

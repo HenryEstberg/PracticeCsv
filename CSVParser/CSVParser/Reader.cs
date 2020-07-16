@@ -80,31 +80,31 @@ namespace CSVParser
                         if (tabooParseError && tempParseError)
                         {
                             rowObject = new Row(animal, temp, taboo, comment, "taboo and temp" ,
-                                " |ERROR: taboo \"" + incorrectTaboo + "\" is not entered in yes / no format and cooking temp \"" + incorrectTemp + "\" is not entered as a numeral|");
+                                "ERROR: taboo <" + incorrectTaboo + "> is not entered in yes / no format and cooking temp <" + incorrectTemp + "> is not entered as a numeral");
                         }
                         else if (tabooParseError && tempCommaError)
                         {
                             rowObject = new Row(animal, temp, taboo, comment, "taboo and temp" ,
-                                " |ERROR: cooking temp \"" + incorrectTemp + "\" contains commas and taboo \"" + incorrectTaboo + "\" is not entered in yes / no format|");
+                                "ERROR: cooking temp <" + incorrectTemp + "> contains commas and taboo <" + incorrectTaboo + "> is not entered in yes / no format");
                         }
                         else if (tempCommaError && tempParseError)
                         {
                             rowObject = new Row(animal, temp, taboo, comment, "temp",
-                                " |ERROR: cooking temp \""+ incorrectTemp + "\" contains commas and is not entered as a numeral|");
+                                "ERROR: cooking temp <"+ incorrectTemp + "> contains commas and is not entered as a numeral");
                         }
                         else if (tempCommaError)
                         {
-                            rowObject = new Row(animal, temp, taboo, comment, "temp", " |ERROR: cooking temp \"" + incorrectTemp +"\" contains commas|");
+                            rowObject = new Row(animal, temp, taboo, comment, "temp", " ERROR: cooking temp <" + incorrectTemp +"> contains commas");
                         }
                         else if (tempParseError)
                         {
                             rowObject = new Row(animal, temp, taboo, comment, "temp" ,
-                                " |ERROR: cooking temp \""+ incorrectTemp + "\" is not entered as a numeral|");
+                                "ERROR: cooking temp <"+ incorrectTemp + "> is not entered as a numeral");
                         }
                         else if (tabooParseError)
                         {
                             rowObject = new Row(animal, temp, taboo, comment, "taboo",
-                                " |ERROR: taboo \""+ incorrectTaboo + "\" is not entered in yes / no format|");
+                                "ERROR: taboo <"+ incorrectTaboo + "> is not entered in yes / no format");
                         }
                         else
                         {
@@ -127,7 +127,7 @@ namespace CSVParser
                 foreach (Row arr in rowList)
                 {
                     Console.Write("R" + rowNum + ": ");
-                    Console.WriteLine(arr.PrintRow());
+                    Console.WriteLine(arr.WriteCsvLine());
 
                     rowNum++;
                 }
