@@ -14,6 +14,7 @@ namespace CSVParser
         public string error;
         public string errorSpot;
         public string notAvailable = "N/A";
+        public bool hasError;
 
 
         public EdibleAnimal(string meat, double cookTemp, bool yn, string concerns)
@@ -22,6 +23,7 @@ namespace CSVParser
             this.cookingTemp = cookTemp;
             this.taboo = yn;
             this.comment = concerns;
+            this.hasError = false;
         }
 
         //this overloaded method only gets activated when we pass in an error message on top of the other variables
@@ -33,6 +35,7 @@ namespace CSVParser
             this.comment = concerns;
             this.error = errorMessage;
             this.errorSpot = errorLocation;
+            this.hasError = true;
         }
 
         public string PrintRow()

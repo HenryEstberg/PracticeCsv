@@ -195,8 +195,7 @@ namespace CSVParser
             return todaysMenu;
 
         }
-
-
+        
         //--------------
         //helper methods
         //--------------
@@ -215,8 +214,7 @@ namespace CSVParser
         private double Cooking_temp(string temp)
         {
            //parseable is true if the computer can convert the string to a double
-
-            bool parseable = Double.TryParse(temp, out double result);
+           bool parseable = Double.TryParse(temp, out double result);
 
             if (parseable)
             {
