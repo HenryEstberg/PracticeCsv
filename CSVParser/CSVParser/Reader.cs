@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.FileIO;
 
 namespace CSVParser
 {
@@ -47,15 +45,13 @@ namespace CSVParser
         //This method runs through the csv file and displays its contents
         public List<EdibleAnimal> FileRead()
         {
-            using (TextFieldParser fileReader = new TextFieldParser(filepath))
+            using (var fileReader = new SimpleCSVParser(filepath))
                 {
-                    fileReader.SetDelimiters(new string[] {","});
-                    fileReader.HasFieldsEnclosedInQuotes = true;
 
                     //prints the appropriate header if the file contains one
                     
                         //reads a new line of the csv file
-                        string[] headData = fileReader.ReadFields();
+                        var headData = fileReader.ReadFields();
                         colNum = 0;
                         animalPos = 5;
                         tabooPos = 5;
@@ -93,7 +89,7 @@ namespace CSVParser
                     //prints the rest of the file and creates a collection of all of the data
                     while (!fileReader.EndOfData)
                     {
-                        string[] lineData = fileReader.ReadFields();
+                        var lineData = fileReader.ReadFields();
 
                         //sets the parameters of the row object and adds it to the list of rows
                         if (animalPos != 5)
