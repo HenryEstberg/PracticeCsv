@@ -62,23 +62,19 @@ namespace CSVParser
                             if (str.Equals("animal"))
                             {
                                 animalPos = colNum;
-                                Console.WriteLine("AnimalPos: "+ animalPos);
                             }
                             else if (str.Equals("taboo"))
                             {
                                 tabooPos = colNum;
-                                Console.WriteLine("TabooPos: " + tabooPos);
-                        }
+                            }
                             else if (str.Equals("cooking temp"))
                             {
                                 tempPos = colNum;
-                                Console.WriteLine("TempPos: " + tempPos);
-                        }
+                            }
                             else if (str.Equals("comment"))
                             {
                                 commentPos = colNum;
-                                Console.WriteLine("CommentPos: " + commentPos);
-                        }
+                            }
                         colNum++;
                         }
 
@@ -180,8 +176,8 @@ namespace CSVParser
                 
 
                 //prints the contents of the file
-                rowNum = 0;
-              /*  foreach (EdibleAnimal arr in todaysMenu)
+                /*rowNum = 0;
+                foreach (EdibleAnimal arr in todaysMenu)
                 {
                     Console.Write("R" + rowNum + ": ");
                     Console.WriteLine(arr.WriteCsvLine());
@@ -200,10 +196,10 @@ namespace CSVParser
             //I know it will always be a string, so there's no need for a conversion here
             
             //adds quotation marks if the string contains commas
-            if (animal.Contains(","))
+            /*if (animal.Contains(","))
             {
                 return "\"" + animal + "\"";
-            }
+            }*/
             return animal;
         }
 
@@ -260,10 +256,10 @@ namespace CSVParser
 
         private string Comment(string comment)
         {
-            if (comment.Contains(","))
+            /*if (comment.Contains(","))
             {
                 return "\"" + comment + "\"";
-            }
+            }*/
             return comment;
         }
 
