@@ -176,14 +176,14 @@ namespace CSVParser
                 
 
                 //prints the contents of the file
-                /*rowNum = 0;
-                foreach (EdibleAnimal arr in todaysMenu)
+            rowNum = 0;
+              /*  foreach (EdibleAnimal arr in todaysMenu)
                 {
                     Console.Write("R" + rowNum + ": ");
                     Console.WriteLine(arr.WriteCsvLine());
 
                     rowNum++;
-                } */
+                }*/
             return todaysMenu; 
 
         }

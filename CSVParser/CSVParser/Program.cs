@@ -43,14 +43,16 @@ namespace CSVParser
                 }
 
             //Tests that the parser is doing what its supposed to do
-            FunctionTest();
-
+            ParserTest("../../../../ProjectExample.csv", "fish,  120.24,  False,  rabbit,  275,  False,  clown,  -360,  True,  does this taste funny to you?horse,  N/A,  True,  there's an error hereERROR: cooking temp <snotwaffle> is not entered as a numeralbird,  N/A,  False,  uh oh, rogue commas ERROR: cooking temp <5,4,3> contains commas123,  N/A,  N/A,  what a messERROR: taboo <b flat> is not entered in yes / no format and cooking temp <hi mom> is not entered as a numeral");
+            ParserTest("../../../../ProjectExample2.csv", "fish,  N/A,  False,  ERROR: cooking temp <> is not entered as a numeralrabbit,  N/A,  False,  ERROR: cooking temp <> is not entered as a numeralclown,  N/A,  True,  does this taste funny to you?ERROR: cooking temp <> is not entered as a numeralhorse,  N/A,  True,  there's an error hereERROR: cooking temp <> is not entered as a numeralbird,  N/A,  False,  chirpERROR: cooking temp <> is not entered as a numeral123,  N/A,  N/A,  what a messERROR: taboo <b flat> is not entered in yes / no format and cooking temp <> is not entered as a numeral");
+            ParserTest("../../../../ProjectExample3.csv", "fish,  120.24,  False,  rabbit,  275,  False,  -360,  N/A,  N/A,  does this taste funny to you?ERROR: taboo <clown> is not entered in yes / no format and cooking temp <yes> is not entered as a numeralhorse,  N/A,  N/A,  there's an error hereERROR: taboo <clown> is not entered in yes / no format and cooking temp <snotwaffle> is not entered as a numeralbird,  N/A,  False,  uh oh, rogue commas ERROR: cooking temp <5,4,3> contains commas123,  N/A,  N/A,  what a messERROR: taboo <b flat> is not entered in yes / no format and cooking temp <hi mom> is not entered as a numeral");
+            ParserTest("../../../../ProjectExample4.csv", "fish,  120.24,  False,  rabbit,  275,  False,  does this taste funny to you?,  -360,  True,  clownhorse,  N/A,  True,  there's an error hereERROR: cooking temp <snotwaffle> is not entered as a numeralbird,  N/A,  False,  uh oh, rogue commas ERROR: cooking temp <5,4,3> contains commas123,  N/A,  N/A,  what a messERROR: taboo <b flat> is not entered in yes / no format and cooking temp <hi mom> is not entered as a numeral");
 
 
         }
 
-        //Tests that the parser is doing what its supposed to do. Should be updated if the parser desired output is changed
-        public static void FunctionTest()
+        //Commented out because there's a new method below that works for all files
+       /* public static void FunctionTest()
         {
             string output = "";
             string file1DesiredOutput = "fish,  120.24,  False,  rabbit,  275,  False,  clown,  -360,  True,  does this taste funny to you?horse,  N/A,  True,  there's an error hereERROR: cooking temp <snotwaffle> is not entered as a numeralbird,  N/A,  False,  uh oh, rogue commas ERROR: cooking temp <5,4,3> contains commas123,  N/A,  N/A,  what a messERROR: taboo <b flat> is not entered in yes / no format and cooking temp <hi mom> is not entered as a numeral";
@@ -72,8 +74,27 @@ namespace CSVParser
             
 
             //Console.WriteLine(output);
+        } */
+
+        public static void ParserTest(string filepath, string desiredOutput)
+        {
+            string output = "";
+            Reader f = new Reader(filepath);
+            var testMenu = f.FileRead();
+            foreach (var animal in testMenu)
+            {
+                output = output + animal.PrintRow();
+            }
+
+            if (!output.Equals(desiredOutput))
+            {
+                Console.WriteLine("Output for file " + filepath + " does not match expected output");
+            }
+            else
+            {
+                Console.WriteLine("Output for " + filepath + " matches expected output");
+            }
         }
-
-
+        
     }
 }
